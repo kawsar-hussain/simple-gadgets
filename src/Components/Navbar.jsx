@@ -15,6 +15,8 @@ import {
   Package,
   LogOut,
   ChevronDown,
+  MenuSquare,
+  LayoutDashboard,
 } from "lucide-react";
 
 export default function Navbar() {
@@ -64,7 +66,7 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-xs transition-all">
-      <div className="max-w-7xl mx-auto px-3 ">
+      <div className="container">
         <div className="flex items-center justify-between h-16 md:h-20 gap-4">
           {/* ================= LEFT: LOGO ================= */}
           <div className="flex items-center gap-2">
@@ -234,6 +236,14 @@ export default function Navbar() {
                   </div>
 
                   <div className="py-1">
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setIsProfileOpen(false)}
+                      className="flex items-center gap-2.5 px-4 py-2 text-xs text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition"
+                    >
+                      <LayoutDashboard className="w-4 h-4 text-slate-400" />
+                      Dashboard
+                    </Link>
                     <Link
                       href="/account"
                       onClick={() => setIsProfileOpen(false)}

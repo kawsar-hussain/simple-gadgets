@@ -1,4 +1,12 @@
 @import "tailwindcss";
+@import "./theme.css";
+
 @plugin "daisyui" {
   themes: light;
+}
+
+.container {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 16px;
 }
