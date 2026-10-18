@@ -1,57 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 
 export default function AddProductForm() {
-  const [formData, setFormData] = useState({
-    productName: "",
-    slug: "",
-    imageUrl: "",
-    category: "Mobile",
-    color: "",
-    brand: "",
-    price: "",
-    ram: "",
-    internalStorage: "",
-  });
-
-  const generateSlug = (text) => {
-    return text.toLowerCase().trim().replace(/\s+/g, "-");
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    if (name === "productName") {
-      setFormData((prev) => ({
-        ...prev,
-        productName: value,
-        slug: generateSlug(value),
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("formData:", formData);
 
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/products`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data))
-      .catch((error) => {
-        console.error("Fetch error:", error);
-      });
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+
+    // Auto-generate slug from product name if not present via disabled input
+    if (!data.slug && data.productName) {
+      data.slug = data.productName
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    console.log("Collected Form Data:", data);
   };
 
   return (
@@ -89,15 +56,13 @@ export default function AddProductForm() {
                 id="productName"
                 type="text"
                 name="productName"
-                value={formData.productName}
-                onChange={handleChange}
                 required
                 placeholder="e.g. Samsung Galaxy S25 Ultra"
                 className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition"
               />
             </div>
 
-            {/* Slug (Auto-generated & Disabled) */}
+            {/* Slug */}
             <div className="space-y-1.5">
               <label
                 htmlFor="slug"
@@ -109,10 +74,8 @@ export default function AddProductForm() {
                 id="slug"
                 type="text"
                 name="slug"
-                value={formData.slug}
                 readOnly
-                disabled
-                placeholder="samsung-galaxy-s25-ultra"
+                placeholder="Auto-generated on submit"
                 className="w-full px-3.5 py-2.5 text-sm bg-slate-100/80 border border-slate-200 rounded-xl text-slate-500 cursor-not-allowed select-none focus:outline-none"
               />
             </div>
@@ -129,8 +92,6 @@ export default function AddProductForm() {
                 id="brand"
                 type="text"
                 name="brand"
-                value={formData.brand}
-                onChange={handleChange}
                 placeholder="e.g. Samsung, Apple, Sony"
                 className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition"
               />
@@ -147,8 +108,6 @@ export default function AddProductForm() {
               <select
                 id="category"
                 name="category"
-                value={formData.category}
-                onChange={handleChange}
                 className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition cursor-pointer"
               >
                 <option value="Mobile">Mobile</option>
@@ -177,8 +136,6 @@ export default function AddProductForm() {
                 id="imageUrl"
                 type="url"
                 name="imageUrl"
-                value={formData.imageUrl}
-                onChange={handleChange}
                 required
                 placeholder="https://images.unsplash.com/photo-..."
                 className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition"
@@ -199,8 +156,6 @@ export default function AddProductForm() {
                 name="price"
                 min="0"
                 step="any"
-                value={formData.price}
-                onChange={handleChange}
                 placeholder="e.g. 1199.99"
                 className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition"
               />
@@ -218,8 +173,6 @@ export default function AddProductForm() {
                 id="color"
                 type="text"
                 name="color"
-                value={formData.color}
-                onChange={handleChange}
                 placeholder="e.g. Titanium Gray, Midnight Black"
                 className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition"
               />
@@ -245,8 +198,6 @@ export default function AddProductForm() {
                 id="ram"
                 type="text"
                 name="ram"
-                value={formData.ram}
-                onChange={handleChange}
                 placeholder="e.g. 8GB, 12GB, 16GB"
                 className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition"
               />
@@ -264,8 +215,6 @@ export default function AddProductForm() {
                 id="internalStorage"
                 type="text"
                 name="internalStorage"
-                value={formData.internalStorage}
-                onChange={handleChange}
                 placeholder="e.g. 128GB, 256GB, 512GB, 1TB"
                 className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition"
               />
