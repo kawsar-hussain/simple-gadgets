@@ -1,34 +1,42 @@
 "use client";
+import React from "react";
+import Link from "next/link";
 import { Pencil, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export default function ProductRowActions({ id, products }) {
+export default function ProductRowActions({ id, slug, products }) {
   const router = useRouter();
   const handleDelete = async (id) => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/products/${id}`,
-      {
-        method: "DELETE",
-      },
-    );
-    const data = await res.json();
-    console.log(data);
-    if (data.deletedCount === 1) {
-      router.refresh();
-      // window.location.reload();
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/products/${id}`,
+        {
+          method: "DELETE",
+        },
+      );
+      const data = await res.json();
+      console.log(data);
+      if (data.deletedCount === 1) {
+        router.refresh();
+      }
+    } catch (error) {
+      console.error("Failed to delete product:", error);
     }
   };
+
+  const editHref = slug ? `/edit/${slug}` : `/edit/${id}`;
+
   return (
     <div className="flex items-center justify-center gap-2">
-      {/* Update Button */}
-      <button
-        type="button"
+      {/* Edit Button */}
+      <Link
+        href={editHref}
         className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 active:bg-amber-200 border border-amber-200/80 rounded-xl transition cursor-pointer shadow-2xs"
-        title="Update Product"
+        title="Edit Product"
       >
         <Pencil className="w-3.5 h-3.5" />
-        <span>Update</span>
-      </button>
+        <span>Edit</span>
+      </Link>
 
       {/* Delete Button */}
       <button
