@@ -19,6 +19,18 @@ export default function AddProductForm() {
     }
 
     console.log("Collected Form Data:", data);
+
+    // send data to the backend
+
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/products`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
   };
 
   return (
