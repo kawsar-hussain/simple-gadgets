@@ -7,21 +7,17 @@ import { useRouter } from "next/navigation";
 export default function ProductRowActions({ id, slug, products }) {
   const router = useRouter();
   const handleDelete = async (id) => {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/products/${id}`,
-        {
-          method: "DELETE",
-        },
-      );
-      const data = await res.json();
-      console.log(data);
-      if (data.deletedCount === 1) {
-        router.refresh();
-      }
-    } catch (error) {
-      console.error("Failed to delete product:", error);
-    }
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/products/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.deletedCount === 1) {
+          console.log("data deleted successfully");
+          router.refresh();
+        }
+        console.log(data);
+      });
   };
 
   const editHref = slug ? `/edit/${slug}` : `/edit/${id}`;

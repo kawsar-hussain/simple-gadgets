@@ -5,6 +5,45 @@ import Link from "next/link";
 import { Save } from "lucide-react";
 
 export default function EditProductForm({ initialProduct }) {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    // Extract form data using browser FormData API
+    const formData = new FormData(event.currentTarget);
+
+    // Convert FormData to a plain JavaScript object
+    const productData = {
+      productName: formData.get("productName"),
+      slug: formData.get("slug"),
+      brand: formData.get("brand"),
+      category: formData.get("category"),
+      imageUrl: formData.get("imageUrl"),
+      price: Number(formData.get("price")),
+      color: formData.get("color"),
+      ram: formData.get("ram"),
+      internalStorage: formData.get("internalStorage"),
+    };
+
+    // Or if you strictly need an array of key-value pairs (entries):
+    // const productArray = Array.from(formData.entries());
+
+    console.log("Submitted Product Data:", initialProduct._id);
+
+    // TODO: Add your API call or Server Action here
+    fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/products/${initialProduct._id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(productData),
+      },
+    )
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -16,7 +55,10 @@ export default function EditProductForm({ initialProduct }) {
         </p>
       </div>
 
-      <form className="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-xs space-y-8">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-xs space-y-8"
+      >
         {/* Basic Information */}
         <div>
           <h2 className="text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100">
@@ -204,8 +246,8 @@ export default function EditProductForm({ initialProduct }) {
           </Link>
 
           <button
-            type="button"
-            className="inline-flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl"
+            type="submit"
+            className="inline-flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl cursor-pointer"
           >
             <Save className="w-4 h-4" />
             <span>Update Product</span>

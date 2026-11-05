@@ -14,6 +14,7 @@ import {
   Zap,
   X,
   SquarePlus,
+  Tag,
 } from "lucide-react";
 
 export default function DashboardSidebar({ sidebarOpen, setSidebarOpen }) {
@@ -23,6 +24,7 @@ export default function DashboardSidebar({ sidebarOpen, setSidebarOpen }) {
     { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
 
     { name: "Add Product", href: "/dashboard/add-product", icon: SquarePlus },
+    { name: "Add Brand", href: "/dashboard/add-brand", icon: Tag },
     { name: "Products", href: "/dashboard/products", icon: Package },
   ];
 
