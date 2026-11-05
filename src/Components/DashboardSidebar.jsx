@@ -15,6 +15,7 @@ import {
   X,
   SquarePlus,
   Tag,
+  Tags,
 } from "lucide-react";
 
 export default function DashboardSidebar({ sidebarOpen, setSidebarOpen }) {
@@ -25,6 +26,7 @@ export default function DashboardSidebar({ sidebarOpen, setSidebarOpen }) {
 
     { name: "Add Product", href: "/dashboard/add-product", icon: SquarePlus },
     { name: "Add Brand", href: "/dashboard/add-brand", icon: Tag },
+    { name: "Brands", href: "/dashboard/brands", icon: Tags },
     { name: "Products", href: "/dashboard/products", icon: Package },
   ];
 
